@@ -1,0 +1,26 @@
+[800] [2016-01-26 12:04:09.628896000] [1:9 base dnsqr] [4ff49032] [] []
+type: UDP_QUERY_RESPONSE
+query_ip: 144.82.39.72
+response_ip: 46.51.185.157
+proto: UDP (17)
+query_port: 42344
+response_port: 53
+id: 32376
+qname: 3.1o19sr00n0s73s6pp351p9pqr8798sqo4r90n787p1ssp78pspn06q106o8n973.757p5r741op37393648s247p01n84noqq0oq6p5s36253050030rqq644r4s1n8.96752ss34ppnsp4509.62r7r4nq7s61s2n9o6r85o46500o60ssror3o3s4.i.00.s.sophosxl.net.
+qclass: IN (1)
+qtype: TXT (16)
+rcode: NXDOMAIN (3)
+delay: 0.011806
+udp_checksum: CORRECT
+query: [238 octets]
+;; ->>HEADER<<- opcode: QUERY, rcode: NOERROR, id: 32376
+;; flags: cd; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 0
+
+;; QUESTION SECTION:
+;3.1o19sr00n0s73s6pp351p9pqr8798sqo4r90n787p1ssp78pspn06q106o8n973.757p5r741op37393648s247p01n84noqq0oq6p5s36253050030rqq644r4s1n8.96752ss34ppnsp4509.62r7r4nq7s61s2n9o6r85o46500o60ssror3o3s4.i.00.s.sophosxl.net. IN TXT
+
+;; ANSWER SECTION:
+
+;; AUTHORITY SECTION:
+
+;; ADDITIONAL SECTION:
