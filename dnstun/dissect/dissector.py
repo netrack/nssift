@@ -47,6 +47,6 @@ class Dissector(object):
 
         def _apply_impl(*chunks):
             context = itertools.izip(dissectors, chunks)
-            return [d.dissect(t) for d, t in context)]
+            return [d.dissect(t) for d, t in context]
 
         return _apply_impl

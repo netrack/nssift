@@ -3,7 +3,7 @@ import glob
 import os
 
 
-class BZipLoader(object):
+class BzLoader(object):
     """BZip2 archives loader."""
 
     # Define a file extension that we should search for
@@ -14,6 +14,7 @@ class BZipLoader(object):
         """Create a new instance of the bzip2 file loaded.
 
         filename: A path to the file to read."""
+        super(BzLoader, self).__init__()
         self.filename = filename
 
     @classmethod
