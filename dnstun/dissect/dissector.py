@@ -36,3 +36,17 @@ class Dissector(object):
             return None
 
         return self.stripall(string.split(symbol, maxsplit))
+
+    @staticmethod
+    def partial(*dissectors):
+        """Function made of list of dissectors that accepts a list
+        of text chunk to be processed
+
+        dissectors: A list of dissector types."""
+        dissectors = [klass() for klass in dissectors]
+
+        def _apply_impl(*chunks):
+            context = itertools.izip(dissectors, chunks)
+            return [d.dissect(t) for d, t in context)]
+
+        return _apply_impl
