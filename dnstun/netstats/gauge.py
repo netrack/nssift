@@ -7,7 +7,7 @@ import six
 LOG = logging.getLogger(__name__)
 
 
-@six.add_metaclass(six.ABCMeta)
+@six.add_metaclass(abc.ABCMeta)
 class Gauge(object):
     """Define an interface for the statistics counter.
 
@@ -57,6 +57,11 @@ class Gauge(object):
                 return None
         return params
 
+    def quotient(self, numerator, denominator):
+        """The quotient of numerator over denominator. Zero, if the
+        denominator is equals to zero."""
+        return (numerator / denominator if denominator else 0.0)
+
 
 class ShannonEntropyGauge(Gauge):
     """Define a Shannon entropy computer.
@@ -93,7 +98,7 @@ class ShannonEntropyGauge(Gauge):
     def normalize(self):
         """Normalize the final entropy value by dividing it
         by count of processed updates."""
-        return self.accumulator / (self.processed or 1.0)
+        return self.quotient(self.accumulator, self.processed)
 
 
 class NumberGauge(Gauge):
@@ -113,7 +118,7 @@ class NumberGauge(Gauge):
     def normalize(self):
         """Normalize the gauge result by dividing the
         accumulator value on count of processed events."""
-        return self.accumulator / (self.processed or 1.0)
+        return self.quotient(self.accumulator, self.processed)
 
 
 class SetGauge(Gauge):
