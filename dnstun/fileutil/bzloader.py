@@ -31,6 +31,9 @@ class BzLoader(object):
         by the specified split string."""
         chunklines = []
 
+        # The implementation is pretty dumb, but we cross the
+        # fingers it will work faster then using the regular
+        # expressions.
         for line in textfile:
             line = line.strip()
 
@@ -52,10 +55,14 @@ class BzLoader(object):
             # append call.
             chunklines.extend((line,))
 
-    def iload(self, symbol):
+        if chunklines:
+            yield "\n".join(chunklines)
+
+    def load(self, symbol):
         """Generator of the stripped chunks from the bzip2 archive
         splitted by the specified string.
 
         symbol: A symbol to split the chunks."""
+        #print bz2.BZ2File, bz2.BZ2File()
         with bz2.BZ2File(self.filename) as textfile:
-            return self.isplit(textfile)
+            return list(self.isplit(textfile, symbol))
