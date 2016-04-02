@@ -6,14 +6,17 @@ from dnstun.netstats import gauge
 class TestGauge(unittest.TestCase):
     """Validate the gauges."""
 
-    def test_gauge_nested_getter(self):
-        Gauge = type("GaugeMock", (gauge.Gauge,),
-            {"normalize": lambda self: self,
-             "update": lambda self, params: self})
+    def setUp(self):
+        super(TestGauge, self).setUp()
+        self.Gauge = type(
+            "GaugeMock", (gauge.Gauge,),
+            {"normalize": lambda self: None,
+             "update": lambda self, params: None})
 
+    def test_gauge_nested_getter(self):
         # Define a counter with a deeply nested key.
         keys = ["this", "is", "a", "nested", "key"]
-        counter = Gauge(keys)
+        counter = self.Gauge(keys)
 
         # Try to retrieve the value from the empty dictionary,
         # and ensure that None is returned.
@@ -25,6 +28,24 @@ class TestGauge(unittest.TestCase):
 
         # Ensure that correct values is returned.
         self.assertEqual(value, "value")
+
+    def test_gauge_join(self):
+        # Define a Gauge mock.
+        counter_first = self.Gauge()
+        counter_second = self.Gauge()
+
+        counter_first.accumulator = 4.8
+        counter_first.processed = 5.0
+
+        counter_second.accumulator = 3.2
+        counter_second.processed = 4.0
+
+        # Join the counters together and ensure the updated
+        # internal parameters.
+        counter_first.join(counter_second)
+
+        self.assertAlmostEqual(counter_first.accumulator, 8.0, places=1)
+        self.assertAlmostEqual(counter_first.processed, 9.0, places=1)
 
     def test_shannon_entropy_gauge(self):
         # Define the entropy counter of the DNS packet names.

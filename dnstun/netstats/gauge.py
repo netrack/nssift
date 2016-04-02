@@ -23,6 +23,12 @@ class Gauge(object):
         self.processed = 0.0
         self.accumulator = 0.0
 
+    def updateall(self, params):
+        """Adjust the gathered statistics with the provided
+        list of parameters."""
+        # Simply call the update for each element of the list.
+        map(self.update, params)
+
     @abc.abstractmethod
     def update(self, params):
         """Adjust the gathered statistics with the
@@ -38,6 +44,21 @@ class Gauge(object):
 
         This method should be implemented in the derived
         classes."""
+
+    def join(self, other):
+        """Adjust the internal counters of the gauge by the
+        other gauge of the same type.
+
+        This method could be implemented in the derived
+        classes."""
+        # Most of the gauge implementations will only need
+        # sum the accumulator and processed count.
+        self.processed += other.processed
+        self.accumulator += other.accumulator
+
+        # Return the reference to the self, so the join
+        # operations could be nested.
+        return self
 
     def get(self, params, keys):
         """Retrieve a value from the specified dictionary
@@ -143,6 +164,16 @@ class SetGauge(Gauge):
         """Normalize the set gauge. This method will simply
         return the count of distinct processed values."""
         return len(self.accumulator)
+
+    def join(self, other):
+        """Update the internal counters with the values
+        of the other set gauge."""
+        self.processed += other.processed
+        self.accumulator.union(other.accumulator)
+
+        # Return the reference to the self, so the join
+        # operations could be nested.
+        return self
 
 
 class IncrementGauge(Gauge):

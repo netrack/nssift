@@ -28,8 +28,16 @@ class DnsDump(Dissector):
         if packet_type is None or packet_id is None:
             return None
 
-        return {"id": packet_id, "type": packet_type,
-                "meta": meta_params, "packet": packet_params}
+        # Define a DNS exchange message payload and data.
+        payload = {"type": packet_type,
+                   "meta": meta_params,
+                   "packet": packet_params}
+
+        # Return the transaction identifiers as like as a list of
+        # payloads. We will return a list, so it will be easier
+        # later to aggregate the requests and responses by the same
+        # identifier value.
+        return {"id": packet_id, "transaction": [payload]}
 
     def fetch_octets(self, params, attribute):
         """Fetch the value of octets of the specified attribute."""
