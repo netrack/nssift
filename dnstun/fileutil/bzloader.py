@@ -60,7 +60,7 @@ class BzLoader(object):
 
     def load(self, symbol):
         """Generator of the stripped chunks from the bzip2 archive
-        splitted by the specified string.
+        divided by the specified string.
 
         symbol: A symbol to split the chunks."""
         #print bz2.BZ2File, bz2.BZ2File()

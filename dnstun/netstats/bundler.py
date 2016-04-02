@@ -18,21 +18,32 @@ class Bundler(object):
         super(Bundler, self).__init__()
         self.gauges = gauges
 
-    def updateone(self, gauge, params):
-        """Update the gauge counter.
+    def safexec(self, func, params):
+        """Execute the specified function with paramers.
 
         The call will be wrapped into the try-catch to
         prevent the interruptions in updates of other gauges."""
         try:
-            gauge.update(params)
+            func(params)
         except Exception as error:
             LOG.error("Failed to update the gauge, because "
                       "of: %(error)s" % {"error": error})
 
     def update(self, params):
-        """Update the counters of the gauges."""
+        """Update the counters with the specified piece
+        of the information.
+
+        params: A statistic chunk."""
         for gauge in self.gauges:
-            self.updateone(gauge, params)
+            self.safexec(gauge.update, params)
+
+    def updateall(self, params):
+        """Updatee the countes with the specified list
+        of the information.
+
+        params: A list of statistic chunks."""
+        for gauge in self.gauges:
+            self.safexec(gauge.updateall, params)
 
     def join(self, other):
         """Join the respective results of the other bundler
@@ -46,3 +57,7 @@ class Bundler(object):
         # Wrap the call into the list conversion, since the
         # imap method returns a generator.
         list(itertools.imap(lambda (a, b): a.join(b), pairs))
+
+        # It is important to return the referece to ourselves,
+        # as it will be used as an accumulator in the reduce call.
+        return self

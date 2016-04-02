@@ -25,7 +25,7 @@ class Dissector(object):
         """
         return itertools.imap(operator.methodcaller("strip"), lst)
 
-    def splitnstrip(self, string, symbol=":", maxsplit=2):
+    def splitnstrip(self, string, symbol=":", maxsplit=1):
         """Split and strip the provided string by the symbol character.
 
         string:   A string to split.
