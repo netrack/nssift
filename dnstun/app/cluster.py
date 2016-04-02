@@ -84,7 +84,7 @@ class Cluster(object):
         extracted by the specified list of keys, and the value.
 
         keys: A list of nested keys."""
-        return lambda value: self._getattr(keys), value
+        return lambda value: (self._getattr(keys, value), value)
 
     def join_transaction(self, a, b):
         """Group the packets payloads of the same transaction.

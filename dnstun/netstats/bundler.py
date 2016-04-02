@@ -18,7 +18,7 @@ class Bundler(object):
         super(Bundler, self).__init__()
         self.gauges = gauges
 
-    def process_gauge(self, gauge, params):
+    def updateone(self, gauge, params):
         """Update the gauge counter.
 
         The call will be wrapped into the try-catch to
@@ -29,10 +29,10 @@ class Bundler(object):
             LOG.error("Failed to update the gauge, because "
                       "of: %(error)s" % {"error": error})
 
-    def process(self, params):
+    def update(self, params):
         """Update the counters of the gauges."""
         for gauge in self.gauges:
-            self.process_gauge(gauge, params)
+            self.updateone(gauge, params)
 
     def join(self, other):
         """Join the respective results of the other bundler

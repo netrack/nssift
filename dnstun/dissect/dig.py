@@ -33,7 +33,7 @@ class Dig(Dissector):
     header_dissector = re.compile("->>HEADER<<- ([\w\ ,:]+)")
 
     # A regular expression for a request/response flag dissection.
-    flags_dissector = re.compile("flags: ([\w\ ]+); ([\w\ ,:]+)")
+    flags_dissector = re.compile("flags:([\w\ ]*); ([\w\ ,:]+)")
 
     def fetch_header(self, text):
         """Dissect the header of the response."""
@@ -66,7 +66,7 @@ class Dig(Dissector):
         if not attrs:
             return None
 
-        attrs.update({"flags": flags})
+        attrs.update({"flags": flags.strip()})
         return attrs
 
     def fetch_section(self, text):
@@ -92,7 +92,10 @@ class Dig(Dissector):
         # So at this point we are expecting request or response header,
         # the set of flags, and four sections: (question section, answer
         # section, authority section, additional section).
-        if len(sections) < 6:
+        #
+        # Note, that additional section could be omitted, since expect
+        # that at leas five will be presented.
+        if len(sections) < 5:
             LOG.debug("Failed to dissect the text file due to "
                       "wrong sections count: '%(text)s'" % {"text": text})
             return None

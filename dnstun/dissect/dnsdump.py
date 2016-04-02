@@ -19,9 +19,9 @@ class DnsDump(Dissector):
         packet_id = packet_params.get("header", {}).get("id")
         packet_type = None
 
-        if "query" in params:
+        if "query" in meta_params:
             packet_type = "REQUEST"
-        elif "response" in params:
+        elif "response" in meta_params:
             packet_type = "RESPONSE"
 
         # Not a valid data, just throw it away.
@@ -49,7 +49,7 @@ class DnsDump(Dissector):
             return params
 
         # Try to dissect octets.
-        match = re.search(value)
+        match = self.octets_dissector.search(value)
         if not match:
             return params
 
@@ -64,16 +64,17 @@ class DnsDump(Dissector):
         """Parse the specified text either as a DNS request, or as
         a DNS response."""
         # Split the specified text into two pieces.
-        pieces = text.split(";;", 1)
+        splitindex = text.find(";;")
 
         # If count of pieces is not equal to two, that means
         # that the specified text chunk is probably broken, and
         # the further processing is useless.
-        if len(pieces) != 2:
+        if splitindex == -1:
             return None
 
         dissect_functor = self.partial(Proto, Dig)
-        meta, packet = dissect_functor(*pieces)
+        meta, packet = dissect_functor(
+            text[:splitindex], text[splitindex:])
 
         # Both dissections should be valid.
         if not (meta and packet):
