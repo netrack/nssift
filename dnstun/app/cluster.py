@@ -1,6 +1,9 @@
 import logging
 import operator
 
+import numpy
+from pyspark.mllib.clustering import KMeans
+
 from dnstun.fileutil.bzloader import BzLoader
 from dnstun.dissect.dnsdump import DnsDump
 
@@ -39,39 +42,6 @@ class Cluster(object):
         """True if the value is not equal to None and False
         otherwise."""
         return value is not None
-
-    def launch_file_dissection(self, sc, params):
-        """First stage of the processing bzip2 archives with
-        DNS dump is to uncompress the data and perform the
-        text dividing into the chunks."""
-        # Parallelize the archives processing.
-        filenames_rdd = sc.parallelize(
-            BzLoader.isearch(params.source_path_name))
-
-        LOG.info("Searching for the DNS dumps archives in the "
-                 "folder: '%(source_path_name)s'." %
-                 {"source_path_name": params.source_path_name})
-
-        # For each the bzip archive, load the content and split it
-        # into the chunks that could be dissected later.
-        filechunks_rdd = filenames_rdd.flatMap(self.uncompress)
-        LOG.info("Uncompressing the DNS dumps files content.")
-
-        # Try to parse every piece of the DNS dump and put
-        # the collected information into the easy-to-use
-        # dictionary.
-        dissections_rdd = filechunks_rdd.map(self.dissect)
-        LOG.info("Dissecting the DNS requests and responses.")
-
-        # The dissection could fail on the corrupted data, in this
-        # case it will be resulted in the None values, so we have
-        # to filter them out.
-        dissections_rdd = dissections_rdd.filter(self.nonefilter)
-        LOG.info("Filtering unsuccessful dissections.")
-
-        # Return the result data set parsed and filtered. Now data
-        # should be ready for statistics collection.
-        return dissections_rdd
 
     def _getattr(self, keys, value):
         """Value of the deeply nested key."""
@@ -125,7 +95,46 @@ class Cluster(object):
         # Return the join of the statistics.
         return a.join(b)
 
-    def launch_statistics_collection(self, dissections_rdd):
+    def array(self, value):
+        """Translate the result of statistics collection to
+        the numpy array."""
+        _, bundler = value
+        return numpy.array(bundler.normalize())
+
+    def file_dissection(self, sc, params):
+        """First stage of the processing bzip2 archives with
+        DNS dump is to uncompress the data and perform the
+        text dividing into the chunks."""
+        # Parallelize the archives processing.
+        filenames_rdd = sc.parallelize(
+            BzLoader.isearch(params.source_path_name))
+
+        LOG.info("Searching for the DNS dumps archives in the "
+                 "folder: '%(source_path_name)s'." %
+                 {"source_path_name": params.source_path_name})
+
+        # For each the bzip archive, load the content and split it
+        # into the chunks that could be dissected later.
+        filechunks_rdd = filenames_rdd.flatMap(self.uncompress)
+        LOG.info("Uncompressing the DNS dumps files content.")
+
+        # Try to parse every piece of the DNS dump and put
+        # the collected information into the easy-to-use
+        # dictionary.
+        dissections_rdd = filechunks_rdd.map(self.dissect)
+        LOG.info("Dissecting the DNS requests and responses.")
+
+        # The dissection could fail on the corrupted data, in this
+        # case it will be resulted in the None values, so we have
+        # to filter them out.
+        dissections_rdd = dissections_rdd.filter(self.nonefilter)
+        LOG.info("Filtering unsuccessful dissections.")
+
+        # Return the result data set parsed and filtered. Now data
+        # should be ready for statistics collection.
+        return dissections_rdd
+
+    def statistics_collection(self, dissections_rdd, params):
         """Second stage of the DNS dumps processing is to perform
         the actual data collection.
 
@@ -161,15 +170,29 @@ class Cluster(object):
         # Return the result statistics for further processing.
         return statistics_rdd
 
+    def clasterize(self, statistics_rdd, params):
+        """Cluster the results of DNS dump processing.
+
+        statistics_rdd: RDD result of the statistics aggregation."""
+        # Convert the aggregated statistics to the vectors
+        # of the n-dimensional pointers.
+        stats_rdd = statistics_rdd.map(self.array)
+
+        # Produce the clusters from the aggregated statistics.
+        clusters = KMeans.train(stats_rdd, params.clusters)
+
+        print(clusters.centers)
+
     def launch(self, sc, params):
         """Perform actual computations.
 
         sc:     A Spark context instance.
         params: Configuration paramers."""
         # Search for the DNS dump archives and parse theirs content.
-        dissections_rdd = self.launch_file_dissection(sc, params)
+        dissections_rdd = self.file_dissection(sc, params)
 
         # Calculate the statistics for each IP address.
-        statistics_rdd = self.launch_statistics_collection(dissections_rdd)
+        statistics_rdd = self.statistics_collection(
+            dissections_rdd, params)
 
-        print list(statistics_rdd.collect())
+        self.clasterize(statistics_rdd, params)

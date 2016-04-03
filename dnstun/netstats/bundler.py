@@ -1,4 +1,5 @@
 import itertools
+import operator
 import logging
 
 
@@ -61,3 +62,12 @@ class Bundler(object):
         # It is important to return the referece to ourselves,
         # as it will be used as an accumulator in the reduce call.
         return self
+
+    def normalize(self):
+        """Array of the normalized counter values."""
+        normalized = itertools.imap(
+            operator.methodcaller("normalize"), self.gauges)
+
+        # Convert the result to the list of normalized
+        # float values.
+        return list(itertools.imap(float, normalized))

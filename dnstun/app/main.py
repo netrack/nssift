@@ -21,6 +21,9 @@ def main():
         "-s", "--source-path-name", required=True,
         help="A path to the directory with bzipped DNS traffic dumps.")
     parser.add_argument(
+        "-c", "--clusters", required=True, type=int,
+        help="Count of the clusters that data will divided into.")
+    parser.add_argument(
         "-d", "--destination-path-name",
         help="A path to the output statistics calculation.")
 
