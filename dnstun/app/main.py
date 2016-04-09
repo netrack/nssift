@@ -24,8 +24,11 @@ def main():
         "-c", "--clusters", required=True, type=int,
         help="Count of the clusters that data will divided into.")
     parser.add_argument(
-        "-d", "--destination-path-name",
+        "-d", "--destination-path-name", required=True,
         help="A path to the output statistics calculation.")
+    parser.add_argument(
+        "-r", "--render-plot", action="store_true",
+        help="Render an image with collected statistics.")
 
     args = parser.parse_args()
 

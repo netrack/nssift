@@ -21,7 +21,7 @@ class Cluster(object):
         """Perform actual computations.
 
         sc:     A Spark context instance.
-        params: Configuration paramers."""
+        params: Configuration parameters."""
         rdd = None
 
         # Launch the streams one by one to process the data.
@@ -36,16 +36,21 @@ def factory():
     predefined set of the counters to collect statistics from
     the DNS dumps files."""
     return BundlerFactory(
-        # The first counters calculates the Shannon entropy of the
+        # The first counter calculates the Shannon entropy of the
         # DNS requested hostnames, since the most of the DNS tunnels
         # are encoding the arbitrary data into the domain names, which
         # lead to the growth of the entropy value.
         [(gauge.ShannonEntropyGauge, ["meta", "qname"]),
 
-        # This counters calculates the number of the different DNS records
+        # This counter calculates the number of the different DNS records
         # types requested from the single IP address, so it could be used
         # as and evidence of the established tunnels.
-         (gauge.SetGauge, ["meta", "qtype"])])
+         (gauge.SetGauge, ["meta", "qtype"]),
+
+        # This counter calculates the average packet DNS requests from
+        # the single host. So based on the host activity we could identify
+        # the DNS anomalies.
+         (gauge.NumberGauge, ["meta", "query"])])
 
 
 def streams():
@@ -56,8 +61,8 @@ def streams():
         # files processing, so later we could collect statistics.
         dissect.DissectionStream(),
 
-        # One the second step we will perform the statistc collection.
+        # One the second step we will perform the statistic collection.
         statistics.StatisticsStream(factory()),
 
-        # Perform the statistics clastering of the aggtegated data.
+        # Perform the statistics clustering of the aggregated data.
         clustering.ClusteringStream()]
