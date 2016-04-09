@@ -6,7 +6,7 @@ import sys
 import pyspark
 
 from dnstun.app.cluster import Cluster
-from dnstun.app.stats import factory
+from dnstun.app.cluster import streams
 
 appname = "DNS tunneling detection tool."
 
@@ -30,7 +30,7 @@ def main():
     args = parser.parse_args()
 
     sc = pyspark.SparkContext(appName=appname)
-    cluster = Cluster(factory=factory())
+    cluster = Cluster(streams=streams())
     cluster.launch(sc, args)
     sc.stop()
 
