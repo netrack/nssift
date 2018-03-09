@@ -7,7 +7,7 @@ from matplotlib import pyplot
 from mpl_toolkits.mplot3d import Axes3D
 from pyspark.mllib.clustering import KMeans
 
-from dnstun.pipeline import stream
+from nssift.pipeline import stream
 
 LOG = logging.getLogger(__name__)
 
@@ -73,7 +73,7 @@ class ClusteringStream(stream.Stream):
         timestamp = datetime.datetime.now().strftime(timefmt)
 
         # Define a plot image name with a created time stamp.
-        figurename = "dnstun-%(timestamp)s.png" % {"timestamp": timestamp}
+        figurename = "nssift-%(timestamp)s.png" % {"timestamp": timestamp}
         LOG.info("Rendering a figure with a cluster centers "
                  "%(figurename)s" % {"figurename": figurename})
 

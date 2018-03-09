@@ -1,5 +1,5 @@
 import logging
-from dnstun.pipeline import stream
+from nssift.pipeline import stream
 
 LOG = logging.getLogger(__name__)
 

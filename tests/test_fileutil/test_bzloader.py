@@ -3,7 +3,7 @@ import glob
 import unittest
 import unittest.mock
 
-from dnstun.fileutil.bzloader import BzLoader
+from nssift.fileutil.bzloader import BzLoader
 
 
 class TestBzLoader(unittest.TestCase):

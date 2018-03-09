@@ -2,7 +2,7 @@ import itertools
 import logging
 import re
 
-from dnstun.dissect.dissector import Dissector
+from nssift.dissect.dissector import Dissector
 
 
 LOG = logging.getLogger(__name__)

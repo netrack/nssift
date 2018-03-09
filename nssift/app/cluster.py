@@ -1,10 +1,10 @@
 import logging
 
-from dnstun.pipeline import dissect
-from dnstun.pipeline import statistics
-from dnstun.pipeline import clustering
-from dnstun.netstats import gauge
-from dnstun.netstats.factory import BundlerFactory
+from nssift.pipeline import dissect
+from nssift.pipeline import statistics
+from nssift.pipeline import clustering
+from nssift.netstats import gauge
+from nssift.netstats.factory import BundlerFactory
 
 
 class Cluster(object):

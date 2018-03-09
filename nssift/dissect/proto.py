@@ -1,7 +1,7 @@
 import itertools
 import operator
 
-from dnstun.dissect.dissector import Dissector
+from nssift.dissect.dissector import Dissector
 
 
 class Proto(Dissector):

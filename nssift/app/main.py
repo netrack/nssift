@@ -5,8 +5,8 @@ import sys
 
 import pyspark
 
-from dnstun.app.cluster import Cluster
-from dnstun.app.cluster import streams
+from nssift.app.cluster import Cluster
+from nssift.app.cluster import streams
 
 appname = "DNS tunneling detection tool."
 

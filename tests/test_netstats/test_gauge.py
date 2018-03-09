@@ -1,6 +1,6 @@
 import unittest
 
-from dnstun.netstats import gauge
+from nssift.netstats import gauge
 
 
 class TestGauge(unittest.TestCase):

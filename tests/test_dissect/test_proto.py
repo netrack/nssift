@@ -1,6 +1,6 @@
 import unittest
 
-from dnstun.dissect.proto import Proto
+from nssift.dissect.proto import Proto
 
 
 class TestProto(unittest.TestCase):

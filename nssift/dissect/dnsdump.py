@@ -1,9 +1,9 @@
 import re
 
-from dnstun.dissect.dig import Dig
-from dnstun.dissect.proto import Proto
+from nssift.dissect.dig import Dig
+from nssift.dissect.proto import Proto
 
-from dnstun.dissect.dissector import Dissector
+from nssift.dissect.dissector import Dissector
 
 
 class DnsDump(Dissector):

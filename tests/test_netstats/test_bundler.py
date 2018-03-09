@@ -1,8 +1,8 @@
 import unittest
 import unittest.mock
 
-from dnstun.netstats.bundler import Bundler
-from dnstun.netstats import gauge
+from nssift.netstats.bundler import Bundler
+from nssift.netstats import gauge
 
 
 class TestBundler(unittest.TestCase):

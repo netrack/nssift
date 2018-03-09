@@ -1,8 +1,8 @@
 import logging
 
-from dnstun.dissect.dnsdump import DnsDump
-from dnstun.fileutil.bzloader import BzLoader
-from dnstun.pipeline import stream
+from nssift.dissect.dnsdump import DnsDump
+from nssift.fileutil.bzloader import BzLoader
+from nssift.pipeline import stream
 
 LOG = logging.getLogger(__name__)
 

@@ -1,6 +1,6 @@
 import unittest
 
-from dnstun.dissect.dnsdump import DnsDump
+from nssift.dissect.dnsdump import DnsDump
 
 
 class TestDnsDump(unittest.TestCase):

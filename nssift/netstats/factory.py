@@ -1,7 +1,7 @@
 import abc
 import six
 
-from dnstun.netstats.bundler import Bundler
+from nssift.netstats.bundler import Bundler
 
 
 @six.add_metaclass(abc.ABCMeta)

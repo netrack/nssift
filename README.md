@@ -1,1 +1,1 @@
-# dnstun - The DNS tunneling detection tool.
+# nssift - The distributed DNS traffic scatterer.

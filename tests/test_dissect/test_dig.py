@@ -1,6 +1,6 @@
 import unittest
 
-from dnstun.dissect.dig import Dig
+from nssift.dissect.dig import Dig
 
 
 class TestDig(unittest.TestCase):
