@@ -1,8 +1,7 @@
 import bz2
 import glob
 import unittest
-
-import mock
+import unittest.mock
 
 from dnstun.fileutil.bzloader import BzLoader
 
@@ -10,24 +9,24 @@ from dnstun.fileutil.bzloader import BzLoader
 class TestBzLoader(unittest.TestCase):
     """Validate the bzip2 file loading."""
 
-    @mock.patch.object(glob, "iglob")
+    @unittest.mock.patch.object(glob, "iglob")
     def test_isearch(self, iglob_mock):
         BzLoader.isearch("/mnt/dns/test")
         # Validate the correct search string is crafted.
         iglob_mock.assert_called_once_with("/mnt/dns/test/*.bz2")
 
-    @mock.patch.object(BzLoader, "isplit")
+    @unittest.mock.patch.object(BzLoader, "isplit")
     def test_load(self, isplit_mock):
-        textfile_mock = mock.MagicMock()
+        textfile_mock = unittest.mock.MagicMock()
 
-        instance_mock = mock.MagicMock()
-        instance_mock.__enter__ = mock.MagicMock(
+        instance_mock = unittest.mock.MagicMock()
+        instance_mock.__enter__ = unittest.mock.MagicMock(
             return_value=textfile_mock)
 
         # Mock the BZ2File constructor to validate passed arguments.
-        bz2file_mock = mock.MagicMock(return_value=instance_mock)
+        bz2file_mock = unittest.mock.MagicMock(return_value=instance_mock)
 
-        with mock.patch.object(bz2, "BZ2File", bz2file_mock):
+        with unittest.mock.patch.object(bz2, "BZ2File", bz2file_mock):
             loader = BzLoader("DNS3-20160126_0705-P0001231.pres.bz2")
             loader.load("---")
 

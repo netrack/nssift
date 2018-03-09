@@ -12,17 +12,15 @@ appname = "DNS tunneling detection tool."
 
 
 def main():
-    logging.basicConfig(
-        stream=sys.stdout,
-        level=logging.INFO)
+    logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
     parser = argparse.ArgumentParser(appname)
     parser.add_argument(
         "-s", "--source-path-name", required=True,
-        help="A path to the directory with bzipped DNS traffic dumps.")
+        help="A path to directory with bzip2-compressed DNS traffic dumps.")
     parser.add_argument(
         "-c", "--clusters", required=True, type=int,
-        help="Count of the clusters that data will divided into.")
+        help="Count of lusters that data will be divided into.")
     parser.add_argument(
         "-d", "--destination-path-name", required=True,
         help="A path to the output statistics calculation.")

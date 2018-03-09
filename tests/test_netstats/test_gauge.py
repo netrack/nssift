@@ -85,7 +85,7 @@ class TestGauge(unittest.TestCase):
         counter.update({"invalid": {"value": 4.5}})
 
         self.assertEqual(counter.processed, 2)
-        self.assertAlmostEquals(counter.accumulator, 10.0, places=1)
+        self.assertAlmostEqual(counter.accumulator, 10.0, places=1)
 
         # Ensure the normalized result.
         self.assertAlmostEqual(counter.normalize(), 5.0, places=1)

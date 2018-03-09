@@ -1,6 +1,5 @@
 import unittest
-
-import mock
+import unittest.mock
 
 from dnstun.netstats.bundler import Bundler
 from dnstun.netstats import gauge
@@ -10,8 +9,8 @@ class TestBundler(unittest.TestCase):
     """Validate the bunlded updates of the statics counters."""
 
     def _makemock(self, value):
-        m = mock.Mock()
-        m.normalize = mock.Mock(return_value=value)
+        m = unittest.mock.Mock()
+        m.normalize = unittest.mock.Mock(return_value=value)
         return m
 
     def test_normalize(self):

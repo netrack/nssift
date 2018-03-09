@@ -44,10 +44,10 @@ class Dig(Dissector):
         params = match.group(1)
 
         # Fetch the pairs of key-value items from the header.
-        pairs = itertools.imap(self.splitnstrip, params.split(","))
+        pairs = map(self.splitnstrip, params.split(","))
 
         # Return a dictionary with parsed header.
-        return dict(itertools.ifilter(None, pairs))
+        return dict(filter(None, pairs))
 
     def fetch_flags(self, text):
         """Dissect the flags of the response."""
@@ -59,10 +59,10 @@ class Dig(Dissector):
         params = match.group(2)
 
         # Fetch the pairs of key-value items from the flags.
-        pairs = itertools.imap(self.splitnstrip, params.split(","))
+        pairs = map(self.splitnstrip, params.split(","))
 
         # Return a dictionary with parsed flags.
-        attrs = dict(itertools.ifilter(None, pairs))
+        attrs = dict(filter(None, pairs))
         if not attrs:
             return None
 
@@ -117,7 +117,7 @@ class Dig(Dissector):
             return None
 
         # All other items will be treated as regular sections.
-        sections = dict(itertools.imap(self.fetch_section, sections[2:]))
+        sections = dict(map(self.fetch_section, sections[2:]))
         sections.update({"header": header, "flags": flags})
 
         return sections

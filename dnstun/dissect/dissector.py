@@ -23,7 +23,7 @@ class Dissector(object):
 
         lst: An iterable of strings.
         """
-        return itertools.imap(operator.methodcaller("strip"), lst)
+        return map(operator.methodcaller("strip"), lst)
 
     def splitnstrip(self, string, symbol=":", maxsplit=1):
         """Split and strip the provided string by the symbol character.
@@ -46,7 +46,7 @@ class Dissector(object):
         dissectors = [klass() for klass in dissectors]
 
         def _apply_impl(*chunks):
-            context = itertools.izip(dissectors, chunks)
+            context = zip(dissectors, chunks)
             return [d.dissect(t) for d, t in context]
 
         return _apply_impl

@@ -27,7 +27,7 @@ class Gauge(object):
         """Adjust the gathered statistics with the provided
         list of parameters."""
         # Simply call the update for each element of the list.
-        map(self.update, params)
+        list(map(self.update, params))
 
     @abc.abstractmethod
     def update(self, params):

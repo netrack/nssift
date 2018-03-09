@@ -14,7 +14,7 @@ class Proto(Dissector):
         text: A string with dumped DNS requests/responses."""
         # Split the text into the lines, then parse each line
         # separately.
-        pairs = itertools.imap(self.splitnstrip, text.split("\n"))
+        pairs = map(self.splitnstrip, text.split("\n"))
 
         # Return a dictionary with non-empty dissected elements.
-        return dict(itertools.ifilter(None, pairs))
+        return dict(filter(None, pairs))

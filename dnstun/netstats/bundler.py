@@ -51,13 +51,13 @@ class Bundler(object):
         counters.
 
         other: A Bundler instance to join."""
-        # In fact we simply will join the counters of this
-        # bundler with the counters of the specified bundler.
-        pairs = itertools.izip(self.gauges, other.gauges)
+        # In fact we simply will join the counters of this bundler with the
+        # counters of the specified bundler.
+        pairs = zip(self.gauges, other.gauges)
 
-        # Wrap the call into the list conversion, since the
-        # imap method returns a generator.
-        list(itertools.imap(lambda (a, b): a.join(b), pairs))
+        # Wrap the call into the list conversion, since the imap method returns
+        # a generator.
+        list(map(lambda ab: ab[0].join(ab[1]), pairs))
 
         # It is important to return the referece to ourselves,
         # as it will be used as an accumulator in the reduce call.
@@ -65,9 +65,9 @@ class Bundler(object):
 
     def normalize(self):
         """Array of the normalized counter values."""
-        normalized = itertools.imap(
+        normalized = map(
             operator.methodcaller("normalize"), self.gauges)
 
         # Convert the result to the list of normalized
         # float values.
-        return list(itertools.imap(float, normalized))
+        return list(map(float, normalized))

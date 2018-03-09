@@ -25,19 +25,17 @@ class ClusteringStream(stream.Stream):
     points_color = "#727272"
 
     def array(self, value):
-        """Translate the result of statistics collection to
-        the numpy array."""
+        """Translate the result of statistics collection to the numpy array."""
         _, bundler = value
         return numpy.array(bundler.normalize())
 
     def render_textfile(self, filename, points):
-        """Render the specified list of points into the
-        empty file."""
+        """Render the specified list of points into the empty file."""
         with open(filename, "w") as textfile:
             # Write the multi-dimensional point into the
             # separate line.
             for point in points:
-                line = " ".join(itertools.imap(str, point))
+                line = " ".join(map(str, point))
                 textfile.write("%(line)s\n" % {"line": line})
 
     def render_text(self, filename, centers, points):
@@ -62,7 +60,7 @@ class ClusteringStream(stream.Stream):
         # Convert the specified arrays of the cluster centers
         # and data points into the numpy array, so we could
         # easily draw required plots.
-        centers, points = map(numpy.array, [centers, points])
+        centers, points = list(map(numpy.array, [centers, points]))
 
         plot = figure.add_subplot(111, projection="3d")
         plot.scatter(centers[:,0], centers[:,1], centers[:,2],
