@@ -1,10 +1,12 @@
-from setuptools import setup, find_packages
+import nssift
+import setuptools
 
-setup(
+
+setuptools.setup(
     name="nssift",
-    version="0.0.1",
+    version=nssift.__version__,
     description="The distributed DNS traffic scatterer.",
-    packages=find_packages(),
+    packages=setuptools.find_packages(),
     license="MIT",
     install_requires=[
         "pyspark>=2.3.0",
@@ -12,6 +14,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "nssift = nssift.app.main:main"],
+            "nssift = nssift.main:main"
+        ],
     },
 )
