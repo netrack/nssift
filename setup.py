@@ -9,7 +9,6 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     license="MIT",
     install_requires=[
-        "pypandoc>=1.4",
         "pyspark>=2.3.0",
         "matplotlib>=2.2.0",
     ],
